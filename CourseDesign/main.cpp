@@ -23,63 +23,63 @@ char timeRecord[10] = { 0 };
 IMAGE img[GRAPH_NUM];     //´æ´¢Í¼Æ¬
 IMAGE backgroud;
 
-class Game {
-public:
-	int InitGame();   // ³õÊ¼»¯ÓÎÏ· Éú³ÉÀ×£¬Ã¿¸ö¿Õ¸ñ¾Å¹¬¸ñÄÚÖÜÎ§µÄÀ×Êý£¬¶ÔÃ¿¸ö¸ñ×Ó½øÐÐ¼ÓÃÜ´¦Àí
-	int play();			// ·µ»ØÊý×éÖµ
-};
-
 class Graph {
 public:
 	void GraphLoading();
 	void gameDraw();  // »æÖÆÓÎÏ·µØÍ¼
 };
 
-class TimeCounter {
+class Operation {
 public:
-	void TimeCounting(void* none); // ¼ÆÊ±Æ÷º¯Êý
 	void Recording(int pass);    // ½«ÓÎÏ·¼ÇÂ¼Ð´ÈëÎÄ¼þµÄº¯Êý
+	void MainMenu(HWND& window);
+	void ShowRecording();
+	void BlankOpen(int r, int c);
+	void boom();  //±¬Õ¨ºóÕ¹Ê¾ËùÓÐÀ×
+	int print();   // ´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊýÁ¿
+};
+
+class Game {
+public:
+	Graph graph;
+	Operation operation;
+	int InitGame();   // ³õÊ¼»¯ÓÎÏ· Éú³ÉÀ×£¬Ã¿¸ö¿Õ¸ñ¾Å¹¬¸ñÄÚÖÜÎ§µÄÀ×Êý£¬¶ÔÃ¿¸ö¸ñ×Ó½øÐÐ¼ÓÃÜ´¦Àí
+	int play();			// ·µ»ØÊý×éÖµ
 };
 
 
-void MainMenu(HWND window);
-void ShowRecording();
-void BlankOpen(int r, int c);
-void boom();  //±¬Õ¨ºóÕ¹Ê¾ËùÓÐÀ×
-int print();   // ´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊýÁ¿
- 
+void TimeCounting(void* none); // ¼ÆÊ±Æ÷º¯Êý
 
 //ÓÎÏ·Ö÷º¯Êý
 int main()
 {
-	TimeCounter timecounter;
-	_beginthread(timecounter.TimeCounting(), 0, NULL);
+	 Game MineSweeper;
+	_beginthread(TimeCounting, 0, NULL);
 restart:
 	timingStart = 0;// ¼ÆÊ±¹Ø±Õ£¬·ÀÖ¹ÔÚ¿ªÊ¼²Ëµ¥ÏÔÊ¾¼ÆÊ±
 	HWND window = initgraph(COL * SIZE + 220, ROW * SIZE);
 	SetWindowText(window, "C++É¨À×Ð¡ÓÎÏ· by ÕÔ›ÂÒÙ");
-	MainMenu(window);
+	MineSweeper.operation.MainMenu(window);
 	mciSendString("close BGM ", 0, 0, 0);
 	mciSendString("open ./BGM1.MP3 alias BGM", NULL, 0, NULL);  //Ïò¶àÃ½ÌåÉè±¸½Ó¿Ú(mci)·¢ËÍ(send)Ò»¸ö×Ö·û´®(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);
 	putimage(0, 0, &backgroud); //ÖØÐÂÔØÈë±³¾°Í¼
-	Graph graph;
-	graph.GraphLoading();
-	Game MineSweeper;
+	MineSweeper.graph.GraphLoading();
+	
 	MineSweeper.InitGame(); //Éú³ÉÀ×£¬³õÊ¼»¯£¬¼ÓÃÜ
 	while (1)
 	{
-		graph.gameDraw(); //Ö´ÐÐÒ»´ÎplayºóÖØ¸´½øÈëÑ­»··´¸´ÌùÍ¼
-		print(); //´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊýÁ¿
-		ShowRecording();
+		MineSweeper.graph.gameDraw(); //Ö´ÐÐÒ»´ÎplayºóÖØ¸´½øÈëÑ­»··´¸´ÌùÍ¼
+		MineSweeper.operation.print(); //´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊýÁ¿
+		MineSweeper.operation.ShowRecording();
 		if (MineSweeper.play() == -1) //playº¯Êý×ÔÉí»áÒ»Ö±ÔËÐÐ½ÓÊÕµã»÷¸ñ×ÓµÄÐÅÏ¢£¬µã»÷µ½¸ñ×Óºó²Å·µ»Ø
 		{
-			boom();
-			graph.gameDraw();  //²Èµ½À×ºóÈ«½âÃÜÖØÐÂÌùÍ¼Õ¹Ê¾ËùÓÐÀ×
+			MineSweeper.operation.boom();
+			MineSweeper.graph.gameDraw();  //²Èµ½À×ºóÈ«½âÃÜÖØÐÂÌùÍ¼Õ¹Ê¾ËùÓÐÀ×
 			mciSendString("close BGM ", 0, 0, 0);
 			mciSendString("open ./±¬Õ¨ÒôÐ§.wav alias BGM", 0, 0, 0);
 			mciSendString("play BGM", 0, 0, 0);
-			timecounter.Recording(0); //Í¨¹ØÊ§°Ü²¢¼ÇÂ¼
+			MineSweeper.operation.Recording(0); //Í¨¹ØÊ§°Ü²¢¼ÇÂ¼
 			int is_ok = MessageBox(window, "²Èµ½À×À²£¬ÓÎÏ·½áÊø!\n±ð»ÒÐÄÀ²£¬ÒªÔÙÀ´Ò»°ÑÊÔÊÔ¿´£¿", "", MB_OKCANCEL);
 			if (is_ok == IDOK)
 			{
@@ -94,7 +94,7 @@ restart:
 			mciSendString("close BGM ", 0, 0, 0);
 			mciSendString("open ./Í¨¹ØÒôÐ§.wav alias BGM", 0, 0, 0);
 			mciSendString("play BGM", 0, 0, 0);
-			Recording(1); //Í¨¹Ø³É¹¦²¢¼ÇÂ¼
+			MineSweeper.operation.Recording(1); //Í¨¹Ø³É¹¦²¢¼ÇÂ¼
 			int is_ok = MessageBox(window, "¹§Ï²ÄãÒ»ÃüÍ¨¹Ø£¡\nÕâÃ´À÷º¦Òª²»ÒªÔÙÀ´Ò»°ÑÑ½£¿", "", MB_OKCANCEL);
 			if (is_ok == IDOK)
 			{
@@ -109,7 +109,7 @@ restart:
 	return 0;
 }
 
-void MainMenu(HWND window)
+void Operation::MainMenu(HWND& window)
 {
 	mciSendString("open ./BGM.MP3 alias BGM", NULL, 0, NULL);  // Ïò¶àÃ½ÌåÉè±¸½Ó¿Ú(mci)·¢ËÍ(send)Ò»¸ö×Ö·û´®(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);       // ²¥·ÅÒôÀÖ
@@ -257,7 +257,7 @@ void MainMenu(HWND window)
 	}
 }
 
-void TimeCounter::TimeCounting(void* none)
+void TimeCounting(void* none)
 {
 	while (1) {
 		if (timingStart) {        // ¿ªÊ¼¼ÆÊ±µÄÅÐ¶¨
@@ -275,7 +275,7 @@ void TimeCounter::TimeCounting(void* none)
 	}
 }
 
-void TimeCounter::Recording(int pass) //¼ÇÂ¼ÓÎÍæÊ±¼ä£¬ÊÇ·ñÍ¨¹Ø,ÓÎÏ·ºÄÊ±£¬Ð´ÈëÎÄ¼þ    //¼Ç×¡Ã¿´ÎÔËÐÐ³ÌÐòÏÔÊ¾  ¿É¶ÁÈëÊý×éÈ»ºóÅÐ¶ÏµÚÒ»ÐÐ²»Îª0µÄµØ·½µ¹ÐòÊä³ö
+void  Operation::Recording(int pass) //¼ÇÂ¼ÓÎÍæÊ±¼ä£¬ÊÇ·ñÍ¨¹Ø,ÓÎÏ·ºÄÊ±£¬Ð´ÈëÎÄ¼þ    //¼Ç×¡Ã¿´ÎÔËÐÐ³ÌÐòÏÔÊ¾  ¿É¶ÁÈëÊý×éÈ»ºóÅÐ¶ÏµÚÒ»ÐÐ²»Îª0µÄµØ·½µ¹ÐòÊä³ö
 {
 	timingStart = 0;
 	FILE* fp;
@@ -290,7 +290,7 @@ void TimeCounter::Recording(int pass) //¼ÇÂ¼ÓÎÍæÊ±¼ä£¬ÊÇ·ñÍ¨¹Ø,ÓÎÏ·ºÄÊ±£¬Ð´ÈëÎÄ¼
 	fclose(fp);
 }
 
-void ShowRecording()
+void  Operation::ShowRecording()
 {
 	char text[1000][55] = { 0 };
 	FILE* fp;
@@ -460,7 +460,7 @@ void Graph::gameDraw()
 
 //µ±×ó¼üµã»÷Î´µã»÷¹ýµÄ¸ñ×ÓÊ± Á¬ÐøÕ¹¿ª
 //Èç¹ûÊó±êÐÅÏ¢ÖªµÀÁËÎÒµã»÷µÄ¸ñ×ÓÊÇÒ»¸ö¿Õ°×¸ñ×Ó£¬ÄÇÃ´½«Ëû·­¿ªºó¿ªÊ¼¶ÔÖÜÎ§µÄ°Ë¸ö¸ñ×Ó½øÐÐ±éÀú£¬Èç¹û±éÀúµ½¿Õ°×¸ñ×ÓÄÇÃ´¾Í½øÐÐÏÂÒ»´Î±éÀú
-void BlankOpen(int r, int c)
+void  Operation::BlankOpen(int r, int c)
 {
 	//´ò¿ª¸ñ×Ó
 	if (map[r][c] >= 59 && map[r][c] <= 68) //µ±µã¿ªÎÊºÅ±ê¼ÇÇøÓòÊ±ºò
@@ -512,7 +512,7 @@ void BlankOpen(int r, int c)
 }
 
 //ÊäµÄÊ±ºò¶ÔËùÓÐ¸ñ×Ó½âÃÜ
-void boom()
+void Operation::boom()
 {
 	for (int r = 1; r <= ROW; r++)
 	{
@@ -535,7 +535,7 @@ void boom()
 }
 
 //ÏÔÊ¾Ê£ÓàÀ×Êý Ô­ÀíÃ¿µ±×ó¼üµã»÷Ò»´Î¹ýºó£¬¶ÔÕûÕÅµØÍ¼½øÐÐ±éÀú£¬°ÑÎ´½âÃÜµÄÀ×ÊýÏÔÊ¾³öÀ´¡£
-int print()
+int Operation::print()
 {
 	char num[10] = { 0 };
 	setbkmode(TRANSPARENT);
@@ -566,7 +566,7 @@ int Game::play()
 					{
 						if (map[r][c] == 20) // µã»÷µ½ÁËÎÞÀ×Çø¿Õ¸ñ
 						{
-							BlankOpen(r, c); // ÖÜÎ§Õ¹¿ª
+							operation.BlankOpen(r, c); // ÖÜÎ§Õ¹¿ª
 							return map[r][c]; // ·µ»Ø·Ç-1Öµ
 						}
 						else
@@ -581,7 +581,7 @@ int Game::play()
 					{
 						if (map[r][c] == 60)
 						{
-							BlankOpen(r, c);
+							operation.BlankOpen(r, c);
 							return map[r][c];
 						}
 						else
