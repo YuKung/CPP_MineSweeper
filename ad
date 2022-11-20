@@ -1,0 +1,41 @@
+[33mcommit 0943ecd6a65fe87db365d96a6c71dab3a8c2c1ca[m[33m ([m[1;36mHEAD -> [m[1;32mfeature_1[m[33m)[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 20:08:32 2022 +0800
+
+    封装出TimeCounter类
+
+[33mcommit 38ee3ec9c1cc5640ba17dfc19a2dd6e4cf3b8e4e[m[33m ([m[1;31morigin/feature_1[m[33m)[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 19:54:36 2022 +0800
+
+    将GraphLoading和gameDraw函数封装到Graph类中
+
+[33mcommit e373e2f55fbb851c2fafadbe13dfb6109b6fde2c[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 19:42:06 2022 +0800
+
+    调试了代码使得代码编译通过
+
+[33mcommit ee7b06b03096f1eb73505088a702cc52fd51bd03[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 19:32:39 2022 +0800
+
+    将InitGame和play函数封装到Game类里，删除了Menu类
+
+[33mcommit 338f08a2fcbed13c53b14d1b4067513527e1f7ff[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 15:23:07 2022 +0800
+
+    将MainMenu函数封装到Menu类里
+
+[33mcommit 835d9b3c54e2fc24dc7fe2c409e8221fd98204d5[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 14:15:06 2022 +0800
+
+    原始采用结构化程序设计实现的扫雷项目
+
+[33mcommit e030ef740e2c2edbb159044d97303cd892ca8d6f[m
+Author: YuKung <2368384805@qq.com>
+Date:   Sun Nov 20 14:14:28 2022 +0800
+
+    添加了README.md

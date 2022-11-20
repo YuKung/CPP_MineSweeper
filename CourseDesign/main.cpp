@@ -25,12 +25,16 @@ IMAGE backgroud;
 
 class Graph {
 public:
+	Graph() {};
+	~Graph() {};
 	void GraphLoading();
 	void gameDraw();  // 绘制游戏地图
 };
 
 class Operation {
 public:
+	Operation() {};
+	~Operation() {};
 	void Recording(int pass);    // 将游戏记录写入文件的函数
 	void MainMenu(HWND& window);
 	void ShowRecording();
@@ -41,10 +45,12 @@ public:
 
 class Game {
 public:
-	Graph graph;
-	Operation operation;
+	Game() {};
+	~Game() {};
+	Graph graph;			// 成员对象
+	Operation operation;    // 成员对象
 	int InitGame();   // 初始化游戏 生成雷，每个空格九宫格内周围的雷数，对每个格子进行加密处理
-	int play();			// 返回数组值
+	int play();// 返回数组值
 };
 
 
