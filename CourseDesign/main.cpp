@@ -23,20 +23,24 @@ char timeRecord[10] = { 0 };
 IMAGE img[GRAPH_NUM];     //存储图片
 IMAGE backgroud;
 
-class Menu {
+
+class Game {
 	public:
-		void MainMenu(HWND& window);
+	int InitGame();   // 初始化游戏 生成雷，每个空格九宫格内周围的雷数，对每个格子进行加密处理
+	int play();			// 返回数组值
 };
+
+
+void MainMenu(HWND window);
 void TimeCounting(void* none);
 void Recording(int pass);
 void ShowRecording();
-void GraphLoading();
-int InitGame();    // 初始化游戏 生成雷，每个空格九宫格内周围的雷数，对每个格子进行加密处理
+void GraphLoading();  
 void gameDraw();  // 绘制游戏地图
 void BlankOpen(int r, int c);
 void boom();  //爆炸后展示所有雷
 int print();   // 打印出当前剩余雷的数量
-int play(); // 返回数组值
+ 
 
 //游戏主函数
 int main()
@@ -46,20 +50,20 @@ restart:
 	timingStart = 0;// 计时关闭，防止在开始菜单显示计时
 	HWND window = initgraph(COL * SIZE + 220, ROW * SIZE);
 	SetWindowText(window, "C++扫雷小游戏 by 赵浡屹");
-	Menu menu;
-	menu.MainMenu(window);
+	MainMenu(window);
 	mciSendString("close BGM ", 0, 0, 0);
 	mciSendString("open ./BGM1.MP3 alias BGM", NULL, 0, NULL);  //向多媒体设备接口(mci)发送(send)一个字符串(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);
 	putimage(0, 0, &backgroud); //重新载入背景图
 	GraphLoading();
-	InitGame(); //生成雷，初始化，加密
+	Game MineSweeper;
+	MineSweeper.InitGame(); //生成雷，初始化，加密
 	while (1)
 	{
 		gameDraw(); //执行一次play后重复进入循环反复贴图
 		print(); //打印出当前剩余雷的数量
 		ShowRecording();
-		if (play() == -1) //play函数自身会一直运行接收点击格子的信息，点击到格子后才返回
+		if (MineSweeper.play() == -1) //play函数自身会一直运行接收点击格子的信息，点击到格子后才返回
 		{
 			boom();
 			gameDraw();  //踩到雷后全解密重新贴图展示所有雷
@@ -96,7 +100,7 @@ restart:
 	return 0;
 }
 
-void Menu::MainMenu(HWND& window)
+void MainMenu(HWND window)
 {
 	mciSendString("open ./BGM.MP3 alias BGM", NULL, 0, NULL);  // 向多媒体设备接口(mci)发送(send)一个字符串(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);       // 播放音乐
@@ -316,8 +320,9 @@ void GraphLoading()
 		loadimage(&img[i], fileName, SIZE, SIZE);
 	}
 }
-//地雷标记为-1，无地雷标记为0
-int InitGame()             //利用time库生成随机数挑选数组元素。
+
+													
+int Game::InitGame()									//地雷标记为-1，无地雷标记为0	//利用time库生成随机数挑选数组元素。
 {
 	timer = 0;
 	timingStart = 1;
@@ -382,7 +387,6 @@ int InitGame()             //利用time库生成随机数挑选数组元素。
 	}
 	return 0;
 }
-
 
 
 //打印游戏区
@@ -534,7 +538,7 @@ int print()
 }
 
 //鼠标点击开玩
-int play()
+int Game::play()
 {
 	ExMessage msg;
 	int r = 0, c = 0;
