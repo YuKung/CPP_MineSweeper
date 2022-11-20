@@ -23,7 +23,10 @@ char timeRecord[10] = { 0 };
 IMAGE img[GRAPH_NUM];     //存储图片
 IMAGE backgroud;
 
-void MainMenu(HWND window);
+class Menu {
+	public:
+		void MainMenu(HWND& window);
+};
 void TimeCounting(void* none);
 void Recording(int pass);
 void ShowRecording();
@@ -43,7 +46,8 @@ restart:
 	timingStart = 0;// 计时关闭，防止在开始菜单显示计时
 	HWND window = initgraph(COL * SIZE + 220, ROW * SIZE);
 	SetWindowText(window, "C++扫雷小游戏 by 赵浡屹");
-	MainMenu(window);
+	Menu menu;
+	menu.MainMenu(window);
 	mciSendString("close BGM ", 0, 0, 0);
 	mciSendString("open ./BGM1.MP3 alias BGM", NULL, 0, NULL);  //向多媒体设备接口(mci)发送(send)一个字符串(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);
@@ -92,7 +96,7 @@ restart:
 	return 0;
 }
 
-void MainMenu(HWND window)
+void Menu::MainMenu(HWND& window)
 {
 	mciSendString("open ./BGM.MP3 alias BGM", NULL, 0, NULL);  // 向多媒体设备接口(mci)发送(send)一个字符串(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);       // 播放音乐
