@@ -23,11 +23,16 @@ char timeRecord[10] = { 0 };
 IMAGE img[GRAPH_NUM];     //´æ´¢Í¼Æ¬
 IMAGE backgroud;
 
-
 class Game {
-	public:
+public:
 	int InitGame();   // ³õÊ¼»¯ÓÎÏ· Éú³ÉÀ×£¬Ã¿¸ö¿Õ¸ñ¾Å¹¬¸ñÄÚÖÜÎ§µÄÀ×Êı£¬¶ÔÃ¿¸ö¸ñ×Ó½øĞĞ¼ÓÃÜ´¦Àí
 	int play();			// ·µ»ØÊı×éÖµ
+};
+
+class Graph {
+public:
+	void GraphLoading();
+	void gameDraw();  // »æÖÆÓÎÏ·µØÍ¼
 };
 
 
@@ -35,8 +40,6 @@ void MainMenu(HWND window);
 void TimeCounting(void* none);
 void Recording(int pass);
 void ShowRecording();
-void GraphLoading();  
-void gameDraw();  // »æÖÆÓÎÏ·µØÍ¼
 void BlankOpen(int r, int c);
 void boom();  //±¬Õ¨ºóÕ¹Ê¾ËùÓĞÀ×
 int print();   // ´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊıÁ¿
@@ -55,18 +58,19 @@ restart:
 	mciSendString("open ./BGM1.MP3 alias BGM", NULL, 0, NULL);  //Ïò¶àÃ½ÌåÉè±¸½Ó¿Ú(mci)·¢ËÍ(send)Ò»¸ö×Ö·û´®(string)
 	mciSendString("play BGM repeat", NULL, 0, NULL);
 	putimage(0, 0, &backgroud); //ÖØĞÂÔØÈë±³¾°Í¼
-	GraphLoading();
+	Graph graph;
+	graph.GraphLoading();
 	Game MineSweeper;
 	MineSweeper.InitGame(); //Éú³ÉÀ×£¬³õÊ¼»¯£¬¼ÓÃÜ
 	while (1)
 	{
-		gameDraw(); //Ö´ĞĞÒ»´ÎplayºóÖØ¸´½øÈëÑ­»··´¸´ÌùÍ¼
+		graph.gameDraw(); //Ö´ĞĞÒ»´ÎplayºóÖØ¸´½øÈëÑ­»··´¸´ÌùÍ¼
 		print(); //´òÓ¡³öµ±Ç°Ê£ÓàÀ×µÄÊıÁ¿
 		ShowRecording();
 		if (MineSweeper.play() == -1) //playº¯Êı×ÔÉí»áÒ»Ö±ÔËĞĞ½ÓÊÕµã»÷¸ñ×ÓµÄĞÅÏ¢£¬µã»÷µ½¸ñ×Óºó²Å·µ»Ø
 		{
 			boom();
-			gameDraw();  //²Èµ½À×ºóÈ«½âÃÜÖØĞÂÌùÍ¼Õ¹Ê¾ËùÓĞÀ×
+			graph.gameDraw();  //²Èµ½À×ºóÈ«½âÃÜÖØĞÂÌùÍ¼Õ¹Ê¾ËùÓĞÀ×
 			mciSendString("close BGM ", 0, 0, 0);
 			mciSendString("open ./±¬Õ¨ÒôĞ§.wav alias BGM", 0, 0, 0);
 			mciSendString("play BGM", 0, 0, 0);
@@ -311,7 +315,7 @@ void ShowRecording()
 }
 
 //¼ÓÔØÍ¼Æ¬
-void GraphLoading()
+void Graph::GraphLoading()
 {
 	for (int i = 0; i <= GRAPH_NUM - 1; i++)
 	{
@@ -390,7 +394,7 @@ int Game::InitGame()									//µØÀ×±ê¼ÇÎª-1£¬ÎŞµØÀ×±ê¼ÇÎª0	//ÀûÓÃtime¿âÉú³ÉËæ»úÊ
 
 
 //´òÓ¡ÓÎÏ·Çø
-void gameDraw()
+void Graph::gameDraw()
 {
 	for (int i = 1; i <= ROW; i++)
 	{
