@@ -10,7 +10,7 @@
 
 #define COL 20  // 长度
 #define ROW 15   // 宽度 
-#define SIZE 25			//每张贴图的size
+#define SIZE 25	  //每张贴图的size
 #define GRAPH_NUM 15
 
 int map[ROW + 2][COL + 2];//翻开格子时候要判断周围八个以内的格子是否有雷，+2防止翻开边界格子时候发生数组溢出。
@@ -35,10 +35,14 @@ public:
 	void gameDraw();  // 绘制游戏地图
 };
 
+class TimeCounter {
+public:
+	void TimeCounting(void* none); // 计时器函数
+	void Recording(int pass);    // 将游戏记录写入文件的函数
+};
+
 
 void MainMenu(HWND window);
-void TimeCounting(void* none);
-void Recording(int pass);
 void ShowRecording();
 void BlankOpen(int r, int c);
 void boom();  //爆炸后展示所有雷
@@ -48,7 +52,8 @@ int print();   // 打印出当前剩余雷的数量
 //游戏主函数
 int main()
 {
-	_beginthread(TimeCounting, 0, NULL);
+	TimeCounter timecounter;
+	_beginthread(timecounter.TimeCounting(), 0, NULL);
 restart:
 	timingStart = 0;// 计时关闭，防止在开始菜单显示计时
 	HWND window = initgraph(COL * SIZE + 220, ROW * SIZE);
@@ -74,7 +79,7 @@ restart:
 			mciSendString("close BGM ", 0, 0, 0);
 			mciSendString("open ./爆炸音效.wav alias BGM", 0, 0, 0);
 			mciSendString("play BGM", 0, 0, 0);
-			Recording(0); //通关失败并记录
+			timecounter.Recording(0); //通关失败并记录
 			int is_ok = MessageBox(window, "踩到雷啦，游戏结束!\n别灰心啦，要再来一把试试看？", "", MB_OKCANCEL);
 			if (is_ok == IDOK)
 			{
@@ -252,7 +257,7 @@ void MainMenu(HWND window)
 	}
 }
 
-void TimeCounting(void* none)
+void TimeCounter::TimeCounting(void* none)
 {
 	while (1) {
 		if (timingStart) {        // 开始计时的判定
@@ -270,7 +275,7 @@ void TimeCounting(void* none)
 	}
 }
 
-void Recording(int pass) //记录游玩时间，是否通关,游戏耗时，写入文件    //记住每次运行程序显示  可读入数组然后判断第一行不为0的地方倒序输出
+void TimeCounter::Recording(int pass) //记录游玩时间，是否通关,游戏耗时，写入文件    //记住每次运行程序显示  可读入数组然后判断第一行不为0的地方倒序输出
 {
 	timingStart = 0;
 	FILE* fp;

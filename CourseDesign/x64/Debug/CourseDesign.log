@@ -1,2 +1,4 @@
 ﻿  main.cpp
-  CourseDesign.vcxproj -> D:\codes\077_赵浡屹_实验二_code\x64\Debug\CourseDesign.exe
+D:\codes\077_赵浡屹_实验二_code\CourseDesign\main.cpp(56,40): error C2660: “TimeCounter::TimeCounting”: 函数不接受 0 个参数
+D:\codes\077_赵浡屹_实验二_code\CourseDesign\main.cpp(40,7): message : 参见“TimeCounter::TimeCounting”的声明
+D:\codes\077_赵浡屹_实验二_code\CourseDesign\main.cpp(97,4): error C3861: “Recording”: 找不到标识符
