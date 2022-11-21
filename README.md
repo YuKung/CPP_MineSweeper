@@ -5,4 +5,4 @@
 
 ![image-20221121205530132](assets/image-20221121205530132.png)
 
-项目相关附件在[assets](.\assets)文件夹内。
+项目相关附件在[assets](./assets)文件夹内。
